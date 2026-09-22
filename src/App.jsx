@@ -63,9 +63,18 @@ function App() {
       }
     }
 
+    const handleFullscreenChange = () => {
+      setFullScreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
     return () => {
       if (removeTimerListener) removeTimerListener();
       if (removeCameraListener) removeCameraListener();
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
     };
   }, []);
 
@@ -127,6 +136,17 @@ function App() {
   async function handleStartExam() {
     if (!candidateName.trim() || !userId.trim()) {
       setApiError('Please fill in both Candidate Name and User ID.');
+      return;
+    }
+
+    if (!cameraEnabled) {
+      setApiError('Camera access is required. Please enable your camera before starting the exam.');
+      return;
+    }
+
+    const isCurrentlyFullscreen = !!document.fullscreenElement || fullScreen;
+    if (!isCurrentlyFullscreen) {
+      setApiError('Fullscreen mode is required. Please enable fullscreen before starting the exam.');
       return;
     }
 
@@ -374,16 +394,38 @@ function App() {
 
               <div className="divider"></div>
 
-              {/* Action Bar */}
-              <div className="setup-actions">
-                <button
-                  className="btn btn-primary btn-large"
-                  disabled={loading || !candidateName || !userId}
-                  onClick={handleStartExam}
-                >
-                  {loading ? 'Initializing Exam...' : '🚀 Start Exam Now'}
-                </button>
-              </div>
+              {/* Action Bar & Requirements Status */}
+              {(() => {
+                const canStartExam =
+                  cameraEnabled && fullScreen && candidateName.trim() && userId.trim();
+                return (
+                  <>
+                    {!canStartExam && (
+                      <div className="requirements-summary">
+                        <div className="requirements-header">
+                          <span className="req-icon">⚠️</span>
+                          <span>Complete all requirements to unlock exam:</span>
+                        </div>
+                        <ul className="requirements-list">
+                          {!candidateName.trim() && <li>Fill in Candidate Full Name</li>}
+                          {!userId.trim() && <li>Fill in Candidate ID / Roll No</li>}
+                          {!cameraEnabled && <li>Enable Heimdall Camera Access</li>}
+                          {!fullScreen && <li>Enable Fullscreen Mode</li>}
+                        </ul>
+                      </div>
+                    )}
+                    <div className="setup-actions">
+                      <button
+                        className="btn btn-primary btn-large"
+                        disabled={loading || !canStartExam}
+                        onClick={handleStartExam}
+                      >
+                        {loading ? 'Initializing Exam...' : '🚀 Start Exam Now'}
+                      </button>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         )}

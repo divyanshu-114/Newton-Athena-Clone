@@ -53,5 +53,41 @@
         "answeredAt": "2026-09-21T08:10:43.318Z"
       }
     ]
+  },
+  {
+    "sessionId": "session-1790057741346",
+    "userId": "STU-8756",
+    "name": "Alex Johnson",
+    "startedAt": "2026-09-22T06:15:41.346Z",
+    "submittedAt": null,
+    "status": "in-progress",
+    "attempted": 0,
+    "correct": 0,
+    "wrong": 0,
+    "answers": []
+  },
+  {
+    "sessionId": "session-1790057995391",
+    "userId": "STU-7456",
+    "name": "Alex Johnson",
+    "startedAt": "2026-09-22T06:19:55.391Z",
+    "submittedAt": null,
+    "status": "in-progress",
+    "attempted": 0,
+    "correct": 0,
+    "wrong": 0,
+    "answers": []
+  },
+  {
+    "sessionId": "session-1790058426807",
+    "userId": "STU-9183",
+    "name": "Alex Johnson",
+    "startedAt": "2026-09-22T06:27:06.807Z",
+    "submittedAt": "2026-09-22T06:27:18.960Z",
+    "status": "submitted",
+    "attempted": 0,
+    "correct": 0,
+    "wrong": 0,
+    "answers": []
   }
 ]
